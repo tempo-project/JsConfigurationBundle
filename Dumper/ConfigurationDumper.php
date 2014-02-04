@@ -13,6 +13,7 @@
 namespace Tempo\Bundle\JsConfigurationBundle\Dumper;
 
 use Symfony\Component\Config\Definition\Dumper\YamlReferenceDumper;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -66,7 +67,7 @@ class ConfigurationDumper
 
         $content = sprintf("%s(%s);", $callback, $dataConfig);
 
-       return file_put_contents($targetPath . '/tempo_configuration.js', $content);
+        return file_put_contents($targetPath . '/tempo_configuration.js', $content);
     }
 
     public function resolveConfig($haystack , $needle)
@@ -105,7 +106,14 @@ class ConfigurationDumper
 
     protected function getContainerBuilder()
     {
+        if (!is_file($cachedFile = $this->kernel->getContainer()->getParameter('debug.container.dump'))) {
+            throw new \LogicException(sprintf('Debug information about the container could not be found. Please clear the cache and try again.'));
+        }
+
         $container = new ContainerBuilder();
+
+        $loader = new XmlFileLoader($container, new FileLocator());
+        $loader->load($cachedFile);
 
         return $container;
     }

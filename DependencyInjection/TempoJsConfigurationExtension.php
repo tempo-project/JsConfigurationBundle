@@ -32,9 +32,8 @@ class TempoJsConfigurationExtension extends Extension
 
         $container
             ->getDefinition('tempo.jsconfiguration.dumper')
-            ->replaceArgument(2, $config['config_to_expose']);
-
-       //var_dump( $container->getParameterBag()->all());
-      // var_dump( $container->getDefinitions());
+            ->replaceArgument(2, $config['config_to_expose'])
+            ->replaceArgument(1, $container->getParameterBag()->all())
+        ;
     }
 }

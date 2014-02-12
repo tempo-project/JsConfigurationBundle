@@ -49,7 +49,7 @@ Moreover, you can configure a list of configuration to expose in app/config/conf
 
 tempo_js_configuration:
   config_to_expose: [mopa_bootstrap.form.show_legend]
-
+```
 
 Add these two lines in your layout:
 
@@ -64,8 +64,8 @@ Testing
 
 Setup the test suite using [Composer](http://getcomposer.org/):
 
-    $ composer install --dev
+$ composer install --dev
 
 Run it using PHPUnit:
 
-    $ phpunit
+$ phpunit

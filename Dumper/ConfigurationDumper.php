@@ -12,39 +12,25 @@
 
 namespace Tempo\Bundle\JsConfigurationBundle\Dumper;
 
-use Symfony\Component\Config\Definition\Dumper\YamlReferenceDumper;
-use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Filesystem\Filesystem;
-
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Yaml\Yaml;
-
+use Symfony\Component\Serializer\Serializer;
 
 class ConfigurationDumper
 {
-    /**
-     * @var KernelInterface
-     */
-    protected $kernel;
-
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem;
+    protected $serializer;
+    protected $parameterBag;
+    protected $configToExpose;
 
     /**
      * Default constructor.
-     * @param KernelInterface   $kernel            The kernel.
-     * @param FileSystem        $filesystem        The file system.
-     * @param array             $configToExpose Some parameter names to expose.
+     *
+     * @param Serializer $serializer
+     * @param array $parameterBag
+     * @param array $configToExpose
      */
-    public function __construct(KernelInterface $kernel, Filesystem $filesystem, array $configToExpose = array())
+    public function __construct(Serializer $serializer, array $parameterBag, array $configToExpose = array())
     {
-        $this->kernel     = $kernel;
-        $this->filesystem = $filesystem;
+        $this->serializer     = $serializer;
+        $this->parameterBag   = $parameterBag;
         $this->configToExpose = $configToExpose;
     }
 
@@ -55,66 +41,18 @@ class ConfigurationDumper
     public function dump($targetPath)
     {
         $dataConfig = array();
-        $configuration = $this->getConfiguration();
 
-        $returnConfig = $this->configToExpose;
         foreach($this->configToExpose as $alias) {
-            $dataConfig[$alias]  = $this->resolveConfig($alias, $configuration);
+            if(isset($this->parameterBag[$alias])) {
+                $dataConfig[$alias] = $this->parameterBag[$alias];
+            }
         }
         $callback = 'Tempo.Configuration.setData';
 
-        $dataConfig = $this->kernel->getContainer()->get('tempo.jsconfiguration.serializer')->serialize( $dataConfig, 'json' );
+        $dataConfig = $this->serializer->serialize( $dataConfig, 'json' );
 
         $content = sprintf("%s(%s);", $callback, $dataConfig);
 
         return file_put_contents($targetPath . '/tempo_configuration.js', $content);
-    }
-
-    public function resolveConfig($haystack , $needle)
-    {
-        foreach (explode('.', $haystack) as $e) {
-            if(isset($needle[$e])) {
-                $needle = $needle[$e];
-            }
-        }
-
-        return $needle;
-    }
-
-    public function getConfiguration()
-    {
-        $configurations = '';
-        $containerBuilder = $this->getContainerBuilder();
-        $bundles = $this->kernel->getContainer()->get('kernel')->getBundles();
-        $dumper = new YamlReferenceDumper();
-
-        foreach ($bundles as $bundle) {
-            $extension = $bundle->getContainerExtension();
-
-            if($extension) {
-
-                $configuration = $extension->getConfiguration(array(), $containerBuilder);
-                if(is_object($configuration)) {
-                    $configurations.= $dumper->dump($configuration, $extension->getNamespace());
-                }
-            }
-            $extension = null;
-        }
-
-        return Yaml::parse($configurations);
-    }
-
-    protected function getContainerBuilder()
-    {
-        if (!is_file($cachedFile = $this->kernel->getContainer()->getParameter('debug.container.dump'))) {
-            throw new \LogicException(sprintf('Debug information about the container could not be found. Please clear the cache and try again.'));
-        }
-
-        $container = new ContainerBuilder();
-
-        $loader = new XmlFileLoader($container, new FileLocator());
-        $loader->load($cachedFile);
-
-        return $container;
     }
 }

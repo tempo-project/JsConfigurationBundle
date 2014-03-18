@@ -1,7 +1,7 @@
 <?php
 
 /*
-* This file is part of the Tempo-project package http://tempo.ikimea.com/>.
+* This file is part of the Tempo-project package http://tempo-project.org/>.
 *
 * (c) Mlanawo Mbechezi  <mlanawo.mbechezi@ikimea.com>
 *

@@ -36,7 +36,7 @@ class ConfigurationDumper
 
     /**
      * @param $targetPath
-     * @return int
+     * @return string\boolean
      */
     public function dump($targetPath)
     {

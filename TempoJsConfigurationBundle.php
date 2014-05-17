@@ -13,7 +13,6 @@ namespace Tempo\Bundle\JsConfigurationBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-
 /**
  * @author Mbechezi Mlanawo <mlanawo.mbechezi@ikimea.com>
  */

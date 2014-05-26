@@ -17,7 +17,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\Output;
-
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 class DumpCommand extends ContainerAwareCommand
 {
@@ -31,7 +32,7 @@ class DumpCommand extends ContainerAwareCommand
         parent::initialize($input, $output);
 
         $this->targetPath = $input->getArgument('target') ?:
-            realpath(sprintf('%s/../web/js', $this->getContainer()->getParameter('kernel.root_dir')));
+            str_replace('app', 'web/js', $this->getContainer()->getParameter('kernel.root_dir'));
     }
 
     /**
@@ -56,11 +57,11 @@ class DumpCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!is_dir($dir = dirname($this->targetPath))) {
+        $fs = new Filesystem();
+
+        if (!$fs->exists($dir = $this->targetPath)) {
             $output->writeln('<info>[dir+]</info>  ' . $dir);
-            if (false === @mkdir($dir, 0777, true)) {
-                throw new \RuntimeException('Unable to create directory ' . $dir);
-            }
+            $fs->mkdir($dir);
         }
 
         $output->writeln(sprintf(

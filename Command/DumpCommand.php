@@ -9,32 +9,15 @@
 * file that was distributed with this source code.
 */
 
-
 namespace Tempo\Bundle\JsConfigurationBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Output\Output;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOException;
 
 class DumpCommand extends ContainerAwareCommand
 {
-    private $targetPath;
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function initialize(InputInterface $input, OutputInterface $output)
-    {
-        parent::initialize($input, $output);
-
-        $this->targetPath = $input->getArgument('target') ?:
-            str_replace('app', 'web/js', $this->getContainer()->getParameter('kernel.root_dir'));
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -57,21 +40,37 @@ class DumpCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $fs = new Filesystem();
+        $fs = $this->getContainer()->get('filesystem');
+        $targetPath = $input->getArgument('target') ? : $this->getDefaultTargetPath();
 
-        if (!$fs->exists($dir = $this->targetPath)) {
-            $output->writeln('<info>[dir+]</info>  ' . $dir);
-            $fs->mkdir($dir);
+        if (!$fs->exists($targetPath)) {
+            $output->writeln(sprintf(
+                '<info>[dir+]</info> %s',
+                $targetPath
+            ));
+            $fs->mkdir($targetPath);
         }
 
         $output->writeln(sprintf(
             'Installing configuration files in <comment>%s</comment> directory',
-            $this->targetPath
+            $targetPath
         ));
 
         $this
             ->getContainer()
             ->get('tempo.jsconfiguration.dumper')
-            ->dump($this->targetPath);
+            ->dump($targetPath);
+    }
+
+    /**
+     * @return string   Default target path
+     */
+    private function getDefaultTargetPath()
+    {
+        return str_replace(
+            'app',
+            'web/js',
+            $this->getContainer()->getParameter('kernel.root_dir')
+        );
     }
 }

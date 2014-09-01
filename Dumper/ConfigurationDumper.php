@@ -23,8 +23,8 @@ class ConfigurationDumper
      * Default constructor.
      *
      * @param Serializer $serializer
-     * @param array $parameterBag
-     * @param array $configToExpose
+     * @param array      $parameterBag
+     * @param array      $configToExpose
      */
     public function __construct(Serializer $serializer, array $parameterBag, array $configToExpose = array())
     {
@@ -41,8 +41,8 @@ class ConfigurationDumper
     {
         $dataConfig = array();
 
-        foreach($this->configToExpose as $alias) {
-            if(isset($this->parameterBag[$alias])) {
+        foreach ($this->configToExpose as $alias) {
+            if (isset($this->parameterBag[$alias])) {
                 $dataConfig[$alias] = $this->parameterBag[$alias];
             }
         }

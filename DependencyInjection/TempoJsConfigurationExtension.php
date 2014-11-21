@@ -29,6 +29,9 @@ class TempoJsConfigurationExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
+        $container->setParameter('tempo_js_configuration.template_compile', $config['template_compile']);
+        $container->setParameter('tempo_js_configuration.folder_js_compile', $config['folder_js_compile']);
+
         $container
             ->getDefinition('tempo.jsconfiguration.dumper')
             ->replaceArgument(2, $config['config_to_expose'])

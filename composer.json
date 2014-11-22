@@ -1,5 +1,5 @@
 {
-    "name": "tempo/jsconfiguration-bundle",
+    "name": "tempo-project/jsconfiguration-bundle",
     "description": "A pretty nice way to expose your configuration to your JavaScript.",
     "keywords": [ "configuration", "javascript", "symfony" ],
     "type": "symfony-bundle",
@@ -21,12 +21,12 @@
         "symfony/browser-kit": "~2.3"
     },
     "autoload": {
-        "psr-0": { "Tempo\\Bundle\\JsConfigurationBundle": "" }
+        "psr-4": { "Tempo\\Bundle\\JsConfigurationBundle\\": "" }
     },
     "target-dir": "Tempo/Bundle/JsConfigurationBundle",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0-dev"
+            "dev-master": "2.0-dev"
         }
     }
 }

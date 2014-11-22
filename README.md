@@ -14,7 +14,7 @@ into your `composer.json` file:
 ``` json
 {
     "require": {
-        "tempo/jsconfiguration-bundle": "dev-master"
+        "tempo-project/jsconfiguration-bundle": "dev-master"
     }
 }
 ```

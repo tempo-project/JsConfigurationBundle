@@ -38,7 +38,7 @@ class Configuration implements ConfigurationInterface
                     ->prototype('scalar')->end()
                 ->end()
                 ->scalarNode('folder_js_compile')->defaultValue('%kernel.root_dir%/../client/templates')->end()
-                ->scalarNode('template_compile')->defaultValue('%kernel.root_dir%/../web/template-js-compile.js')->end()
+                ->scalarNode('template_compile')->defaultValue('%kernel.root_dir%/../web/js/template-js-compile.js')->end()
             ->end()
         ;
 

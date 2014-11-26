@@ -26,7 +26,7 @@
     "target-dir": "Tempo/Bundle/JsConfigurationBundle",
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0-dev"
+            "dev-master": "0.3-dev"
         }
     }
 }

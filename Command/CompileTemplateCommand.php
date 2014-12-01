@@ -73,6 +73,7 @@ class CompileTemplateCommand extends ContainerAwareCommand
         foreach ($this->finder as $file) {
             $content  = file_get_contents($file->getRealpath());
             $content = trim(preg_replace("/\r|\n|\r\n/", '', $content));
+            $content = str_replace("'", "\'", $content);
             $jsTemplate.= 'JST["'.$file->getRelativePathname().'"] = \''.$content.'\';'. "\n";
         }
 

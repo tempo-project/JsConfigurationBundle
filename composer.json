@@ -1,5 +1,5 @@
 {
-    "name": "tempo-project/jsconfiguration-bundle",
+    "name": "tempo/jsconfiguration-bundle",
     "description": "A pretty nice way to expose your configuration to your JavaScript.",
     "keywords": [ "configuration", "javascript", "symfony" ],
     "type": "symfony-bundle",

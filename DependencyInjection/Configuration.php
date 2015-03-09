@@ -28,7 +28,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('tempo_js_configuration')
+        $treeBuilder->root('tempo_js_configuration')
             ->children()
                 ->arrayNode('config_to_expose')
                     ->beforeNormalization()

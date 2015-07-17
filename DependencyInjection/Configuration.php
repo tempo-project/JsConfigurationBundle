@@ -37,7 +37,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->prototype('scalar')->end()
                 ->end()
-                ->scalarNode('folder_js_compile')->defaultValue('%kernel.root_dir%/src/Bundle/AppBundle/Resources/assets/templates')->end()
+                ->scalarNode('folder_js_compile')->defaultValue('%kernel.root_dir%/../src/Tempo/Bundle/AppBundle/Resources/assets/templates')->end()
                 ->scalarNode('template_compile')->defaultValue('%kernel.root_dir%/../web/js/template-js-compile.js')->end()
             ->end()
         ;
